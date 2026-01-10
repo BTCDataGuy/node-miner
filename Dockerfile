@@ -40,7 +40,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # Copy application files
 COPY app.py /app/
 COPY index.html /app/
-COPY config.json /app/
+# config.json will be created at runtime in /data directory
 
 # Copy static files (includes all CSS, JS, fonts, etc.)
 COPY static/ /app/static/
