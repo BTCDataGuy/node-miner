@@ -1,0 +1,14 @@
+services:
+  web:
+    image: node-miner:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    stop_grace_period: 10s
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/data
+    environment:
+      TZ: "Etc/UTC"

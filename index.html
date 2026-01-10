@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Node Miner - Bitcoin CPU Mining</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/static/images/logo.png">
+  <link rel="shortcut icon" type="image/png" href="/static/images/logo.png">
+  
+  <!-- Fonts and icons -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  
+  <!-- Nucleo Icons -->
+  <link href="/static/css/nucleo-icons.css" rel="stylesheet" />
+  
+  <!-- CSS Files -->
+  <link href="/static/css/black-dashboard.min.css" rel="stylesheet" />
+  
+  <!-- Custom Styles -->
+  <style>
+    .info-box {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .info-box .info-category {
+      margin-bottom: 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .info-box .info-value {
+      margin: 0;
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .info-box .info-value i {
+      font-size: 1.2em;
+    }
+    
+    /* Blue Sidebar Theme */
+    .sidebar[data-color="blue"] {
+      background: linear-gradient(180deg, #4C5FD5 0%, #3949AB 100%);
+    }
+    .sidebar[data-color="blue"] .nav li.active > a,
+    .sidebar[data-color="blue"] .nav li.active > a i,
+    .sidebar[data-color="blue"] .nav li.active > a[data-toggle="collapse"],
+    .sidebar[data-color="blue"] .nav li.active > a[data-toggle="collapse"] i {
+      color: #ffffff;
+    }
+    .sidebar[data-color="blue"] .nav li.active > a:before {
+      background: #ffffff;
+    }
+    .sidebar[data-color="blue"] .nav li:hover:not(.active) > a,
+    .sidebar[data-color="blue"] .nav li:hover:not(.active) > a i {
+      color: #ffffff;
+      opacity: 0.8;
+    }
+    .sidebar[data-color="blue"] .logo .simple-text {
+      color: #ffffff;
+    }
+    
+    /* Fix purple border at top of main-panel */
+    .main-panel {
+      border-top: 2px solid #4C5FD5 !important;
+    }
+    
+    /* Blue Input Focus States */
+    .form-control:focus {
+      border-color: #4C5FD5 !important;
+      box-shadow: 0 0 0 0.2rem rgba(76, 95, 213, 0.25) !important;
+    }
+    
+    .form-control:focus,
+    .form-control:active {
+      background-color: #2b3553 !important;
+      border-color: #4C5FD5 !important;
+    }
+    
+    /* Blue Primary Color Override */
+    .btn-primary {
+      background: linear-gradient(180deg, #4C5FD5 0%, #3949AB 100%);
+      border-color: #4C5FD5;
+    }
+    
+    .btn-primary:hover,
+    .btn-primary:focus,
+    .btn-primary:active {
+      background: linear-gradient(180deg, #3949AB 0%, #2c3a8f 100%);
+      border-color: #3949AB;
+    }
+    
+    /* Green buttons matching gauge color */
+    .btn-success {
+      background: #00f2c3 !important;
+      background-image: linear-gradient(to bottom left, #00f2c3, #00d4aa, #00b890) !important;
+      border-color: #00f2c3 !important;
+    }
+    
+    .btn-success:hover,
+    .btn-success:focus,
+    .btn-success:active {
+      background: #00d4aa !important;
+      background-image: linear-gradient(to bottom left, #00d4aa, #00b890, #009d78) !important;
+      border-color: #00d4aa !important;
+    }
+    
+    /* Sidebar Logo Styling */
+    .sidebar .logo .logo-mini img {
+      width: 50px;
+      height: 50px;
+      max-width: 50px;
+      max-height: 50px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+    
+    /* Logo text spacing and size */
+    .sidebar .logo .logo-normal {
+      padding-left: 20px;
+      font-size: 16px;
+    }
+    
+    /* SVG Gauge Styles (CodePen .two style) */
+    .gauge-container {
+      width: 180px;
+      height: 180px;
+      display: inline-block;
+      margin: 10px auto;
+    }
+    
+    .gauge > .dial {
+      stroke: #334455;
+      stroke-width: 3;
+      fill: rgba(0, 0, 0, 0);
+    }
+    
+    .gauge > .value {
+      stroke: #1d8cf8;
+      stroke-width: 3;
+      fill: rgba(0, 0, 0, 0);
+    }
+    
+    .gauge > .value-text {
+      fill: #ffffff;
+      font-family: sans-serif;
+      font-weight: 300;
+      font-size: 1.4em;
+    }
+    
+    /* BTCDataGuy Branding */
+    .btc-data-guy-navbar {
+      text-decoration: none;
+      transition: opacity 0.3s;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .btc-data-guy-navbar:hover {
+      opacity: 0.8;
+      text-decoration: none;
+    }
+    
+    /* Footer Link */
+    .footer .footer-link {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity 0.3s;
+    }
+    
+    .footer .footer-link:hover {
+      opacity: 0.8;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body class="">
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar" data-color="blue">
+      <div class="sidebar-wrapper">
+        <div class="logo">
+          <a href="javascript:void(0)" class="logo-mini">
+            <img src="/static/images/logo.png" alt="NM">
+          </a>
+          <a href="javascript:void(0)" class="simple-text logo-normal">
+            Node Miner
+          </a>
+        </div>
+        <ul class="nav">
+          <li class="active" id="nav-dashboard">
+            <a href="javascript:void(0)" onclick="showPage('dashboard')">
+              <i class="tim-icons icon-chart-pie-36"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li id="nav-pool-settings">
+            <a href="javascript:void(0)" onclick="showPage('pool-settings')">
+              <i class="tim-icons icon-settings-gear-63"></i>
+              <p>Pool Settings</p>
+            </a>
+          </li>
+          <li id="nav-terminal">
+            <a href="javascript:void(0)" onclick="showPage('terminal')">
+              <i class="tim-icons icon-laptop"></i>
+              <p>Terminal</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Main Panel -->
+    <div class="main-panel" data-color="blue">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle d-inline">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="javascript:void(0)" id="page-title">Dashboard</a>
+          </div>
+          <div class="navbar-btc-branding ml-auto mr-3 d-none d-md-block">
+            <a href="https://x.com/BTCDataGuy" target="_blank" rel="noopener noreferrer" class="btc-data-guy-navbar">
+              <span style="font-size: 12px; color: #9A9A9A;">Developed by</span>
+              <img src="/static/images/btcdataguy-logo.png" alt="BTCDataGuy" style="height: 36px; margin-left: 8px; vertical-align: middle;">
+            </a>
+          </div>
+        </div>
+      </nav>
+      <!-- End Navbar -->
+      
+      <!-- Content -->
+      <div class="content">
+        
+        <!-- Dashboard Page -->
+        <div id="page-dashboard" class="page-content">
+          <div class="row">
+            <div class="col-12">
+              <div class="card card-chart">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-sm-6 text-left">
+                      <h5 class="card-category">Mining Control</h5>
+                      <h2 class="card-title">Bitcoin CPU Miner</h2>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="btn-group-toggle float-right" data-toggle="buttons">
+                        <button class="btn btn-sm btn-success btn-round" id="startBtn">
+                          <i class="tim-icons icon-triangle-right-17"></i> Start Mining
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-round ml-2" id="stopBtn">
+                          <i class="tim-icons icon-simple-remove"></i> Stop Mining
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <div class="info-box">
+                        <h6 class="info-category text-muted">Status</h6>
+                        <h3 class="info-value">
+                          <i class="tim-icons icon-check-2" id="statusIcon"></i>
+                          <span id="miningStatus" class="text-info">Stopped</span>
+                        </h3>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="info-box">
+                        <h6 class="info-category text-muted">Current Hashrate</h6>
+                        <h3 class="info-value">
+                          <i class="tim-icons icon-sound-wave text-primary"></i>
+                          <span id="hashrate">0 H/s</span>
+                        </h3>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="info-box">
+                        <h6 class="info-category text-muted">Mining Uptime</h6>
+                        <h3 class="info-value">
+                          <i class="tim-icons icon-watch-time text-info"></i>
+                          <span id="miningUptime">00:00:00</span>
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Zweite Reihe mit neuen Stats -->
+                  <div class="row mt-3">
+                    <div class="col-lg-4">
+                      <div class="info-box">
+                        <h6 class="info-category text-muted">CPU Cores</h6>
+                        <h3 class="info-value">
+                          <i class="tim-icons icon-settings text-info"></i>
+                          <span id="cpuCores">-</span>
+                        </h3>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="info-box">
+                        <h6 class="info-category text-muted">Session Best</h6>
+                        <h3 class="info-value">
+                          <i class="tim-icons icon-chart-bar-32 text-warning"></i>
+                          <span id="sessionBest">0.00000</span>
+                        </h3>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="info-box">
+                        <h6 class="info-category text-muted">All-Time Best</h6>
+                        <h3 class="info-value">
+                          <i class="tim-icons icon-trophy text-success"></i>
+                          <span id="allTimeBest">0.00000</span>
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Hashrate Chart - Full Width -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card card-chart">
+                <div class="card-header">
+                  <h5 class="card-category">Hashrate History</h5>
+                  <h3 class="card-title"><i class="tim-icons icon-chart-bar-32 text-primary"></i> Live Performance</h3>
+                </div>
+                <div class="card-body">
+                  <div class="chart-area">
+                    <canvas id="hashrateChart" height="250"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- System Stats Row -->
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card card-chart">
+                <div class="card-header">
+                  <h5 class="card-category">System Resources</h5>
+                  <h3 class="card-title"><i class="tim-icons icon-laptop text-info"></i> CPU Monitoring</h3>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-6 text-center">
+                      <h6 class="card-category">CPU Usage</h6>
+                      <div class="gauge-container">
+                        <svg id="cpuUsageGauge" class="gauge"></svg>
+                      </div>
+                      <p><span id="cpulimitStatus" class="text-muted" style="font-size: 11px;"></span></p>
+                    </div>
+                    <div class="col-md-6 text-center">
+                      <h6 class="card-category">CPU Temperature</h6>
+                      <div class="gauge-container">
+                        <svg id="cpuTempGauge" class="gauge"></svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Pool Settings Page -->
+        <div id="page-pool-settings" class="page-content" style="display: none;">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-category">Mining Configuration</h5>
+                  <h2 class="card-title">Pool Settings</h2>
+                </div>
+                <div class="card-body">
+                  <form id="configForm">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Pool URL</label>
+                          <input type="text" class="form-control" id="poolUrl" placeholder="stratum+tcp://pool.example.com:3333">
+                          <small class="form-text text-muted">
+                            Accepts: stratum+tcp://host:port, host:port, or IP:port<br>
+                            <strong>Local pool:</strong> Use internal IP 172.17.0.1 if pool runs on same system
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label>Bitcoin Address</label>
+                          <input type="text" class="form-control" id="btcAddress" placeholder="bc1q...">
+                          <small class="form-text text-muted">
+                            Your Bitcoin wallet address where mining rewards will be sent
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>Worker Name</label>
+                          <input type="text" class="form-control" id="workerName" placeholder="worker1">
+                          <small class="form-text text-muted">
+                            Unique identifier for this miner (useful when running multiple miners)
+                          </small>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label>CPU Usage (%)</label>
+                          <input type="number" class="form-control" id="cpuPercentage" min="1" max="100" value="50">
+                          <small class="form-text text-muted">
+                            <i class="tim-icons icon-alert-circle-exc"></i> Not recommended to use more than 50% to avoid system overload
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <button type="submit" class="btn btn-success btn-round">
+                          <i class="tim-icons icon-check-2"></i> Save Configuration
+                        </button>
+                        <button type="button" class="btn btn-info btn-round ml-2" id="testBtn">
+                          <i class="tim-icons icon-wifi"></i> Test Connection
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Terminal Page -->
+        <div id="page-terminal" class="page-content" style="display: none;">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h5 class="card-category">Miner Output</h5>
+                  <h2 class="card-title">Terminal</h2>
+                  <div class="card-actions float-right">
+                    <button class="btn btn-sm btn-secondary btn-simple" onclick="scrollToBottom()">
+                      <i class="tim-icons icon-minimal-down"></i> Scroll to Bottom
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <pre id="minerOutput" style="background-color: #1e1e2f; color: #00ff00; padding: 20px; border-radius: 5px; max-height: 70vh; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 13px;">No output yet</pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <!-- End Content -->
+      
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container-fluid">
+          <div class="copyright">
+            <a href="https://x.com/BTCDataGuy" target="_blank" rel="noopener noreferrer" class="footer-link">
+              Node Miner - Developed by BTCDataGuy
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  
+  <!-- Core JS Files -->
+  <script src="/static/js/core/jquery.min.js"></script>
+  <script src="/static/js/core/popper.min.js"></script>
+  <script src="/static/js/core/bootstrap.min.js"></script>
+  <script src="/static/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  
+  <!-- Chart JS -->
+  <script src="/static/js/plugins/chartjs.min.js"></script>
+  
+  <!-- Notifications Plugin -->
+  <script src="/static/js/plugins/bootstrap-notify.js"></script>
+  
+  <!-- Black Dashboard Core -->
+  <script src="/static/js/black-dashboard.min.js"></script>
+  
+  <!-- Our Custom App JS -->
+  <script src="/static/js/miner-app.js"></script>
+</body>
+
+</html>

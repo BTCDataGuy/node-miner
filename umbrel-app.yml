@@ -1,0 +1,42 @@
+manifestVersion: 1
+id: node-miner
+category: bitcoin
+name: Node Miner
+version: "1.0.0"
+tagline: Bitcoin CPU mining on your Umbrel node
+description: >-
+  Node Miner enables Bitcoin CPU mining directly on your Umbrel node using cpuminer-multi.
+  
+  Configure your mining pool, Bitcoin address, and worker name to start mining with your preferred CPU usage level.
+  
+  Features:
+  - Easy pool configuration
+  - Adjustable CPU usage (1-100%)
+  - Real-time hashrate monitoring
+  - Simple start/stop controls
+  
+  Note: CPU mining Bitcoin is not profitable for most users. This app is primarily for educational purposes or supporting specific mining pools.
+releaseNotes: >-
+  Initial release of Node Miner:
+  - Bitcoin SHA256d mining support
+  - Configurable CPU usage
+  - Real-time monitoring
+  - Simple web interface
+developer: BTCDataGuy
+website: https://github.com/BTCDataGuy/node-miner
+dependencies: []
+repo: https://github.com/BTCDataGuy/node-miner
+support: https://github.com/BTCDataGuy/node-miner/issues
+port: 5000
+gallery:
+  - 1.jpg
+  - 2.jpg
+  - 3.jpg
+path: ""
+defaultUsername: ""
+defaultPassword: ""
+torOnly: false
+permissions:
+  - STORAGE_DOWNLOADS
+submitter: BTCDataGuy
+submission: https://github.com/getumbrel/umbrel-apps
