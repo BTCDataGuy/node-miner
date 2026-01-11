@@ -3,14 +3,13 @@ version: "3.7"
 services:
   app_proxy:
     environment:
-      APP_HOST: btcdataguy-apps-node-miner_web_1
-      APP_PORT: 5000
-      
+      APP_HOST: $APP_BTCDATAGUY_APPS_NODE_MINER_WEB_IP
+      APP_PORT: $APP_BTCDATAGUY_APPS_NODE_MINER_WEB_PORT
+    container_name: btcdataguy-apps-node-miner_app_proxy_1
+  
   web:
     image: btcdataguy-apps-node-miner:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    container_name: btcdataguy-apps-node-miner_web_1
     restart: on-failure
     stop_grace_period: 10s
     volumes:

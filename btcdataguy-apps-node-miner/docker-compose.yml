@@ -1,6 +1,7 @@
 services:
   web:
     image: btcdataguy-apps-node-miner:latest
+    container_name: btcdataguy-apps-node-miner_web_1
     build:
       context: .
       dockerfile: Dockerfile
