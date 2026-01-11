@@ -45,7 +45,7 @@ def load_config():
                 "pool_url": "",
                 "btc_address": "",
                 "worker_name": "",
-                "cpu_percentage": 50,
+                "cpu_percentage": 10,
                 "mining_active": False,
                 "all_time_best_difficulty": 0.0,
                 "all_time_best_difficulty_date": None
@@ -520,6 +520,64 @@ def test_pool_connection(pool_url, btc_address, worker_name="test"):
     except Exception as e:
         return False, f"Test failed: {str(e)}"
 
+def validate_mining_connection(process, timeout=5):
+    """
+    Monitor miner output for timeout seconds to validate connection
+    Returns: (success: bool, message: str)
+    """
+    start_time = time.time()
+    output_buffer = []
+    
+    # Success patterns
+    success_patterns = [
+        "Stratum difficulty set",
+        "new job",
+        "accepted"
+    ]
+    
+    # Failure patterns
+    failure_patterns = [
+        "connection failed",
+        "Connection refused",
+        "Failed to connect",
+        "Invalid address",
+        "authentication failed"
+    ]
+    
+    while time.time() - start_time < timeout:
+        # Check if process died
+        if process.poll() is not None:
+            return False, "Mining process terminated unexpectedly"
+        
+        # Read output (non-blocking)
+        try:
+            line = process.stdout.readline()
+            if line:
+                line_str = line.decode('utf-8', errors='ignore').strip()
+                output_buffer.append(line_str)
+                
+                # Check for failure
+                for pattern in failure_patterns:
+                    if pattern.lower() in line_str.lower():
+                        # Extract specific error
+                        return False, f"Connection failed: {line_str}"
+                
+                # Check for success
+                for pattern in success_patterns:
+                    if pattern.lower() in line_str.lower():
+                        return True, "Connected successfully"
+        except:
+            pass
+        
+        time.sleep(0.1)
+    
+    # Timeout reached - check if still running
+    if process.poll() is None:
+        # Still running, no errors detected
+        return True, "Mining started (validating...)"
+    else:
+        return False, "Mining process failed to start"
+
 def start_mining(config):
     """Start the cpuminer-multi process with cpulimit"""
     global miner_process, cpulimit_process, miner_output, current_hashrate
@@ -567,7 +625,7 @@ def start_mining(config):
     save_config(config)
     
     # Calculate CPU limit for cpulimit
-    cpu_percentage = config.get('cpu_percentage', 50)
+    cpu_percentage = config.get('cpu_percentage', 10)
     cpu_limit = calculate_cpu_limit(cpu_percentage)
     cpu_count = psutil.cpu_count()
     
@@ -639,6 +697,33 @@ def start_mining(config):
         miner_output = []
         current_hashrate = "0 H/s"
         
+        # Validate connection before declaring success
+        print("Validating mining connection...")
+        success, validation_msg = validate_mining_connection(miner_process, timeout=5)
+        
+        if not success:
+            # Connection failed - cleanup
+            print(f"Connection validation failed: {validation_msg}")
+            try:
+                miner_process.kill()
+            except:
+                pass
+            try:
+                cpulimit_process.kill()
+            except:
+                pass
+            
+            # Reset state
+            miner_process = None
+            cpulimit_process = None
+            config['mining_active'] = False
+            save_config(config)
+            
+            return False, validation_msg
+        
+        # Connection successful - start monitoring
+        print(f"Connection validated: {validation_msg}")
+        
         # Start monitoring thread
         monitor_thread = Thread(target=monitor_miner_output, daemon=True)
         monitor_thread.start()
@@ -647,7 +732,7 @@ def start_mining(config):
         config['mining_active'] = True
         save_config(config)
         
-        return True, f"Mining started with {cpu_percentage}% CPU limit ({cpu_limit}% total)"
+        return True, "Mining started successfully"
     except Exception as e:
         # Cleanup if something went wrong
         if miner_process:

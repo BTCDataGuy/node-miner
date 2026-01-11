@@ -4,15 +4,12 @@ Bitcoin CPU mining on your Umbrel node - for education and fun.
 
 ## Overview
 
-Node Miner enables Bitcoin CPU mining directly on your Umbrel node using cpuminer-multi. This app is designed for node operators who want to experiment with Bitcoin mining without dedicated mining hardware like a Bitaxe.
+Node Miner enables Bitcoin CPU mining directly on your Umbrel node using cpuminer-multi. Perfect for node operators who don't have dedicated mining hardware yet (like a Bitaxe or similar) and want to experiment with mining.
 
-**This is for education and fun, not profit.**
-
-CPU mining Bitcoin is completely unprofitable due to the network's difficulty. You will spend more on electricity than you'll ever earn. This app is meant for:
-- Learning how Bitcoin mining works
-- Experimenting with mining pools
-- Supporting specific pools for educational purposes
-- Having fun with your node
+**Important:** This is for education and fun, not profit. CPU mining Bitcoin is unprofitable - you'll spend more on electricity than you'll earn. Use this to:
+- Learn how Bitcoin mining works
+- Experiment with mining pools
+- Have fun with your node
 
 ## Screenshots
 
@@ -37,13 +34,18 @@ CPU mining Bitcoin is completely unprofitable due to the network's difficulty. Y
 3. Configure your pool settings
 4. Start mining!
 
-## Important Warnings
+## Recommended Setup for Beginners
 
-⚠️ **CPU Mining is Unprofitable** - You will not make money. Electricity costs will far exceed any rewards.
+If you're new to mining pools, we recommend starting with **Public Pool**:
+- Lower starting difficulty (0.1) means you'll see results within minutes
+- Great for testing and learning how mining works
+- Available in the Umbrel App Store
 
-⚠️ **System Overload Risk** - Mining with high CPU percentages (>50%) can overload your system and make it unresponsive. **Be extremely careful** with CPU usage settings. Start low (10-20%) and monitor your system.
+**Note:** Other pools like Bassin use higher starting difficulties (42+), which can take days to show your first share. Both work perfectly - it's just about feedback speed.
 
-⚠️ **For Education Only** - This app is meant for learning and experimentation, not as a source of income.
+## Important Warning
+
+⚠️ **System Overload Risk** - Mining with high CPU percentages (>50%) can overload your system and make it unresponsive. Start low (10-20%) and monitor your system carefully.
 
 ## Configuration
 
@@ -61,23 +63,19 @@ Choose carefully! Recommended:
 - **30-40%**: Monitor system responsiveness
 - **50%+**: ⚠️ High risk of system overload - not recommended
 
-## Credits & Acknowledgments
+## Credits
 
-This app is built on top of excellent open-source software:
+Big thanks to the open-source projects that made this possible:
 
-### cpuminer-multi
-Mining engine by tpruvot
-- GitHub: https://github.com/tpruvot/cpuminer-multi
-- License: GPL-2.0
+**cpuminer-multi** by tpruvot - The powerful mining engine that does all the heavy lifting  
+https://github.com/tpruvot/cpuminer-multi (GPL-2.0)
 
-### Black Dashboard
-UI theme by Creative Tim
-- Website: https://www.creative-tim.com/product/black-dashboard
-- License: MIT License
+**Black Dashboard** by Creative Tim - Beautiful UI theme that makes everything look great  
+https://www.creative-tim.com/product/black-dashboard (MIT License)
 
 ## License
 
-This app uses cpuminer-multi (GPL-2.0) and Black Dashboard (MIT License).
+MIT License (see LICENSE file). Includes cpuminer-multi (GPL-2.0) and Black Dashboard (MIT).
 
 ## Support
 

@@ -390,12 +390,17 @@ function startMining() {
             showNotification('Mining started successfully!', 'success');
             updateStatus();
         } else {
-            showNotification('Error: ' + data.message, 'danger');
+            // Show detailed error message
+            showNotification('Failed to start mining: ' + data.message, 'danger');
+            // Update status to reflect failure
+            setTimeout(updateStatus, 500);
         }
     })
     .catch(error => {
         console.error('Error starting mining:', error);
         showNotification('Error starting mining: ' + error, 'danger');
+        // Update status to reflect failure
+        setTimeout(updateStatus, 500);
     });
 }
 
