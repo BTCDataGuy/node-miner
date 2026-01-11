@@ -2,7 +2,7 @@ manifestVersion: 1
 id: btcdataguy-apps-node-miner
 category: bitcoin
 name: Node Miner
-version: "1.0.0"
+version: "1.0.1"
 tagline: Bitcoin CPU mining on your Umbrel node
 description: >-
   Node Miner enables Bitcoin CPU mining directly on your Umbrel node using cpuminer-multi.
