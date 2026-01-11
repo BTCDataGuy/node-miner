@@ -2,20 +2,44 @@ manifestVersion: 1
 id: btcdataguy-apps-node-miner
 category: bitcoin
 name: Node Miner
-version: "1.0.1"
+version: "1.0.2"
 tagline: Bitcoin CPU mining on your Umbrel node
 description: >-
-  Node Miner enables Bitcoin CPU mining directly on your Umbrel node using cpuminer-multi.
+  Bitcoin CPU mining on your Umbrel node - for education and fun, not profit.
   
-  Configure your mining pool, Bitcoin address, and worker name to start mining with your preferred CPU usage level.
+  
+  Node Miner enables Bitcoin CPU mining directly on your Umbrel node using cpuminer-multi. Perfect for node operators who want to experiment with mining without dedicated hardware.
+  
+  
+  ⚠️ IMPORTANT: This is for education and fun, not profit. CPU mining Bitcoin is unprofitable - you'll spend more on electricity than you'll earn.
+  
   
   Features:
-  - Easy pool configuration
-  - Adjustable CPU usage (1-100%)
-  - Real-time hashrate monitoring
-  - Simple start/stop controls
   
-  Note: CPU mining Bitcoin is not profitable for most users. This app is primarily for educational purposes or supporting specific mining pools.
+  - Flexible Pool Configuration: Connect to external pools or internal pools on the same Umbrel (use 172.17.0.1 for internal)
+  
+  - Adjustable CPU Usage: Set mining intensity from 1-100% of your CPU power
+  
+  - Real-time Dashboard: Monitor hashrate, mining statistics, and system resources
+  
+  - Simple Controls: Easy start/stop buttons with live status updates
+  
+  
+  Recommended for Beginners:
+  
+  Start with Public Pool (available in Umbrel App Store) - lower difficulty means you'll see results within minutes, perfect for testing and learning.
+  
+  
+  ⚠️ System Overload Warning: Mining with high CPU percentages (>50%) can overload your system. Start low (10-20%) and monitor carefully!
+  
+  
+  Configuration:
+  
+  - Pool URL formats: stratum+tcp://pool.example.com:3333 or pool.example.com:3333
+  
+  - For internal pools on same Umbrel: use 172.17.0.1 instead of localhost
+  
+  - CPU Usage: 10-20% safe, 30-40% monitor closely, 50%+ high risk
 releaseNotes: >-
   Initial release of Node Miner:
   - Bitcoin SHA256d mining support
