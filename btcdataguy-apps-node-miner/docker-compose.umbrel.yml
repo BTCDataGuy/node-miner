@@ -8,7 +8,7 @@ services:
     container_name: btcdataguy-apps-node-miner_app_proxy_1
   
   web:
-    image: btcdataguy-apps-node-miner:latest
+    image: btcdataguy/node-miner:latest
     container_name: btcdataguy-apps-node-miner_web_1
     restart: on-failure
     stop_grace_period: 10s

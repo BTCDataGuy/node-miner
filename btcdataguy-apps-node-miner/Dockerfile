@@ -21,12 +21,18 @@ RUN apt-get update && apt-get install -y \
     cpulimit \
     && rm -rf /var/lib/apt/lists/*
 
-# Clone and build cpuminer-multi
+# Clone and build cpuminer-multi with proper architecture handling
 WORKDIR /tmp
 RUN git clone https://github.com/tpruvot/cpuminer-multi.git
 WORKDIR /tmp/cpuminer-multi
-RUN ./build.sh || (./autogen.sh && ./configure CFLAGS="-O3" && make)
-RUN make install
+RUN ./autogen.sh && \
+    if [ "$(uname -m)" = "aarch64" ]; then \
+        ./configure CFLAGS="-O3 -march=armv8-a" --with-crypto --with-curl; \
+    else \
+        ./configure CFLAGS="-O3" --with-crypto --with-curl; \
+    fi && \
+    make -j$(nproc) && \
+    make install
 
 # Set up application directory
 WORKDIR /app
